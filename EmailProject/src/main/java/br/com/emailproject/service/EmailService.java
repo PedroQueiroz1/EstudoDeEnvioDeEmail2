@@ -27,9 +27,9 @@ public class EmailService extends Thread {
 
 	// Não é recomendado utilizar atributos na classe quando @Stateless
 	private List<Email> emails;
-	
+
 	private static final String HEADER_CONTEXT = "text/html; charset=utf-8";
-	
+
 	public void enviar(Email email) {
 		emails = new ArrayList<>();
 		emails.add(email);
@@ -40,34 +40,48 @@ public class EmailService extends Thread {
 		this.emails = emails;
 		send();
 	}
-	
+
 	private EmailService copy() {
 		EmailService emailService = new EmailService();
 		emailService.emails = emails;
 		return emailService;
 	}
-	
+
 	private void send() {
 		new Thread(this.copy()).start();
 	}
-	
+
 	@Override
 	public void run() {
 		Properties props = new Properties();
-		
+
+		/*
+		 * Está configurado no arquivo standalone.xml do WILDFLY!!!
+		 * Lá é possível encontrar as propriedades configuradas:
+		 * email-project.mail.smtp.host/port
+		 * email-project.mail.from
+		 * !!!
+		 */
+		String host = System.getProperty("email-project.mail.smtp.host");
+		String port = System.getProperty("email-project.mail.smtp.port");
+
 		props.put("mail.smtp.starttls.enable", true);
-		props.put("mail.smtp.host", System.getProperty("email-project.mail.smtp.host"));
-		props.put("mail.smtp.port", System.getProperty("email-project.mail.smtp.port"));
-		
+		props.put("mail.smtp.host", host);
+		props.put("mail.smtp.port", port);
+
+
 		Session session = Session.getInstance(props);
 		session.setDebug(false);
-		
-		for(Email email : emails) {
-			
+
+		for (Email email : emails) {
+
 			try {
 				Message message = new MimeMessage(session);
-				message.setFrom(new InternetAddress(System.getProperty("pedrotestejava@outlook.com")));
-				
+				message.setFrom(new InternetAddress(System.getProperty("email-project.mail.from")));
+
+				if (email.getDestinatario() == null) {
+					System.out.println("Erro! Destinatário nulo.");
+				}
 				if (email.getDestinatario().contains("/")) {
 					List<InternetAddress> emailsLocal = new ArrayList<>();
 					for (String e : email.getDestinatario().split("/")) {
@@ -78,7 +92,7 @@ public class EmailService extends Thread {
 					InternetAddress para = new InternetAddress(email.getDestinatario());
 					message.addRecipient(Message.RecipientType.TO, para);
 				}
-				
+
 				message.setSubject(email.getAssunto());
 				MimeBodyPart textPart = new MimeBodyPart();
 				textPart.setHeader("Content-Type", HEADER_CONTEXT);
@@ -87,12 +101,12 @@ public class EmailService extends Thread {
 				mp.addBodyPart(textPart);
 				message.setContent(mp);
 				Transport.send(message);
-				
+
 			} catch (MessagingException e) {
 				LogUtil.getLogger(EmailService.class).error("Erro ao enviar e-mail: " + e.getMessage());
 				e.printStackTrace();
 			}
-			
+
 		}
 	}
 }

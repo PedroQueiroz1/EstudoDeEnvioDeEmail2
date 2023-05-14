@@ -23,7 +23,7 @@ public class EmailBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	private static final String DESTINATARIO = "pedrotestejava@outlook.com";
+	private static final String DESTINATARIO = "pedroqueir0z@outlook.com";
 	private static final String ASSUNTO = "testando segundo envio de email";
 
 	@Inject

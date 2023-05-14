@@ -11,10 +11,10 @@ public class EmailLayout {
 		
 		StringBuilder texto = new StringBuilder();
 		
-		texto.append("testeee")
+		texto.append("TESTE")
 			.append(QUEBRA_DE_LINHA_DUPLA);
 		
-		texto.append("Solicito alguma coisa alguma coisa!")
+		texto.append("Solicito o funcionamento desse e-mail!")
 			.append(QUEBRA_DE_LINHA_DUPLA);
 		
 		gerarAssinatura(texto);
@@ -34,6 +34,6 @@ public class EmailLayout {
 
 
 	private String gerarRodape(StringBuilder texto) {
-		return texto.append("Email automatico. Favor, não responder esse e-mail!").toString();
+		return texto.append("Email automatico. Favor, não responder esse e-mail.").toString();
 	}
 }
