@@ -18,8 +18,8 @@
   Projeto criado para o estudo de envio de e-mail com JavaMail, MailHog e Wildfly.
  
 ## Ferramentas utilizadas
-[![My Skills](https://skillicons.dev/icons?i=java)](https://skillicons.dev)
- *Também é utilizado Mailhog e Wildfly 18!
+[![My Skills](https://skillicons.dev/icons?i=java,html)](https://skillicons.dev)
+ *Também é utilizado Mailhog, Wildfly 18 e JSF!
   
 ## Acesso ao projeto
 
